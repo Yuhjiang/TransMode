@@ -1,0 +1,62 @@
+Training Set (X_train, y_train):  (6377, 15) (6377,)
+Testing Set (X_test, y_test):  (2126, 15) (2126,)
+Accuracy Score:  0.858419567262
+Null Accuracy Score:  0.242790239093
+[[299  24   5  36]
+ [ 33 346  46  27]
+ [  4  69 248   4]
+ [ 34  17   2 932]]
+--------------------------------------------------------
+Total instances in confusion matrix:  2126
+--------------------------------------------------------
+Bike_predict:  370
+Bike_actuals:  364
+True Positive :  299
+True Negative :  1691
+False Positive:  71
+False Negative:  65
+--------------------------------------------------------
+Bus_predict:  456
+Bus_actuals:  452
+True Positive :  346
+True Negative :  1564
+False Positive:  110
+False Negative:  106
+--------------------------------------------------------
+Car_predict:  301
+Car_actuals:  325
+True Positive :  248
+True Negative :  1748
+False Positive:  53
+False Negative:  77
+--------------------------------------------------------
+Walk_predict:  999
+Walk_actuals:  985
+True Positive :  932
+True Negative :  1074
+False Positive:  67
+False Negative:  53
+--------------------------------------------------------
+----------------------------------------------------------
+Model accuracy:		0.86
+Model classification error:	0.14
+----------------------------------------------------------
+Bike recall (TP rate):	0.82
+Bike FP Rate:		0.04
+Bike precision:		0.81
+Bike specif.		0.96
+----------------------------------------------------------
+Bus recall (TP rate):	0.77
+Bus FP Rate:		0.07
+Bus precision:		0.66
+Bus specif.:		0.93
+----------------------------------------------------------
+Car recall (TP rate):	0.76
+Car FP Rate:		0.03
+Car precision:		1.15
+Car specif.:		0.97
+----------------------------------------------------------
+Walk recall (TP rate):	0.95
+Walk FP Rate:		0.06
+Walk precision:		0.93
+Walk specif.:		0.94
