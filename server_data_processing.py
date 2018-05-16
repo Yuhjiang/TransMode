@@ -25,7 +25,7 @@ columns = ['用户ID', '星期', '日期', 'Trip_ID', '出行目的', '第几次
            '出发时间', '达到时间', '出发时', '出发分', '到达时', '到达分', '出行时间',
            '出行方式总数', '主要出行方式', '出行方式1', '用时1', '出行方式2', '用时2', '出行方式3', '用时3', '出行方式4', '用时4',
            '性别', '年龄', '宿舍区', '年级', '专业大类', '自行车保有', '电动车保有', '汽车保有',
-           '校内主要出行方式', '校外主要出行方式']
+           '校内主要出行方式', '校外主要出行方式', 'Source']
 data = pd.DataFrame(columns=columns)
 person = pd.read_csv(person_path)
 persons = person['用户ID'].ravel()
@@ -150,7 +150,7 @@ while i < lines_num:
             modes_num, main_mode,
             subtrip[0], subtrip[1], subtrip[2], subtrip[3], subtrip[4], subtrip[5], subtrip[6], subtrip[7],
             sex, age, area, grade, major, bike, ebike, car,
-            main_mode_in_college, main_mode_out_college]
+            main_mode_in_college, main_mode_out_college, source]
     row = []
     for l in line:
         if not isinstance(l, str):
@@ -162,7 +162,7 @@ while i < lines_num:
                '出发时间', '达到时间', '出发时', '出发分', '到达时', '到达分', '出行时间',
                '出行方式总数', '主要出行方式', '出行方式1', '用时1', '出行方式2', '用时2', '出行方式3', '用时3', '出行方式4', '用时4',
                '性别', '年龄', '宿舍区', '年级', '专业大类', '自行车保有', '电动车保有', '汽车保有',
-               '校内主要出行方式', '校外主要出行方式']
+               '校内主要出行方式', '校外主要出行方式', 'Source]
     """
     data.loc[num, :] = row
     num += 1
