@@ -31,8 +31,7 @@ Low_Threshold = Average_Walk_Velocity * Low_Threshold_Percentage
 
 class OneSegment(object):
     def __init__(self, raw_data):
-        self.raw_data = raw_data
-        self.data = self.json2pandas()
+        self.data = pd.DataFrame(raw_data)
         self.rf = pickle.load(model)
 
     @staticmethod
@@ -89,40 +88,7 @@ class OneSegment(object):
 
         return compass_bearing
 
-    def json2pandas(self):
-        """
-        把输入的list数据转化成pandas数据
-        :return:
-        """
-        segment_ids = []
-        trans_modes = []
-        former_trans_modes = []
-        latitudes = []
-        longitudes = []
-        dates = []
-        times = []
-
-        for i in range(0, len(self.raw_data)):
-            row_i = self.raw_data[i]
-            for j in range(0, len(row_i['data'])):
-                row_j = self.raw_data[i]['data'][j]
-                segment_ids.append(row_i['segment_ID'])
-                trans_modes.append(row_i['trans_mode'])
-                former_trans_modes.append(row_i['former_trans_mode'])
-                latitudes.append(row_j['latitude'])
-                longitudes.append(row_j['longitude'])
-                dates.append(row_j['date'])
-                times.append(row_j['time'])
-
-        columns = ['segment_ID', 'trans_mode', 'former_trans_mode', 'latitude', 'longitude', 'date', 'time']
-        data = pd.DataFrame([[segment_ids,
-                              trans_modes,
-                              former_trans_modes,
-                              longitudes,
-                              dates,
-                              times]], columns=columns)
-        return data
-
+		
     def calc_gps_feature(self):
         """
         计算速度，加速度
@@ -250,7 +216,7 @@ class OneSegment(object):
         self.data.loc[:, 'bearing_delta_redirect'] = bearing_delta_redirect
 
     def calc_segment_feature(self):
-        seg_columns = ['segment_ID',                         # Segment_ID
+        seg_columns = ['segment_ID',                         # segment_ID
                        'former_trans_mode',                  # 前一段的交通工具
                        'time_total',                         # 一段segment的时间
                        'distance_total',                     # 一段segment的距离
@@ -369,9 +335,35 @@ class OneSegment(object):
 
 
 if __name__ == '__main__':
-    str_data = sys.argv[1]
-    json_data = eval(str_data)
-    print(json_data)
-    og = OneSegment(json_data)
+    data = [
+    {
+        'segment_ID': 23141241,
+        "latitude":39.897337,
+        "longitude":116.343463,
+        "date":"2008-12-11",
+        "time":"23:41:30"
+    },
+    {
+        'segment_ID': 23141241,
+        "latitude":39.897340,
+        "longitude":116.343463,
+        "date":"2008-12-11",
+        "time":"23:41:32"
+    },
+    {
+        'segment_ID': 23141241,
+        "latitude":39.897340,
+        "longitude":116.34333,
+        "date":"2008-12-11",
+        "time":"23:41:34"
+    },
+    {
+        'segment_ID': 23141241,
+        "latitude":39.897337,
+        "longitude":116.343464,
+        "date":"2008-12-11",
+        "time":"23:41:36"
+    }]
+    og = OneSegment(data)
     og.calc_gps_feature()
     og.recognition()

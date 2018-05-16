@@ -17,14 +17,16 @@ import matplotlib.image as mpimg
 import imageio
 import datetime as dt
 from geopy.distance import vincenty
-from math import *
+import math
+from math import pi
 import csv
 from scipy import ndimage
-from map import *
+import gmap
 import imageio
 
 ee = 0.00669342162296594323     # 偏心率平方
 a = 6378245.0                   # 长半轴
+
 
 class Visualization(object):
 
@@ -135,13 +137,17 @@ class Visualization(object):
         plt.show()
 
     @staticmethod
-    def add_background(area):
+    def add_background(area, zoom, filename='sample', source='gaode'):
         """
         绘制地图
         :param area:
         :return:
         """
-
+        gmap.getmap(area[0], area[1], area[2], area[3], zoom, filename, source)
+        mapZoom = mpimg.imread('./output/sample.png')
+        plt.imshow(mapZoom)
+        plt.axis('off')
+        plt.show()
 
     @staticmethod
     def calc_timestamp_for_gps(date_time):
@@ -380,8 +386,7 @@ class Visualization(object):
         plt.legend()
         plt.show()
 
-    @staticmethod
-    def wgs84_to_gcj02(lat, long):
+    def wgs84_to_gcj02(self, lat, long):
         """
         wgs84坐标系转gcj02坐标系
         https://github.com/wandergis/coordTransform_py/blob/master/coordTransform_utils.py
@@ -390,8 +395,8 @@ class Visualization(object):
         :param long:wgs84经度
         :return:  gcj02坐标系
         """
-        dlat = transformlat(long - 105.0, lat - 35.0)
-        dlong = transformlong(long - 105.0, lat - 35.0)
+        dlat = self._transformlat(long - 105.0, lat - 35.0)
+        dlong = self._transformlong(long - 105.0, lat - 35.0)
         radlat = lat / 180.0 * pi
         magic = math.sin(radlat)
         magic = 1 - ee * magic * magic
@@ -402,9 +407,33 @@ class Visualization(object):
         mglong = long + dlong
         return [mglat, mglong]
 
+    @staticmethod
+    def _transformlat(long, lat):
+        ret = -100.0 + 2.0 * long + 3.0 * lat + 0.2 * lat * lat + \
+              0.1 * long * lat + 0.2 * math.sqrt(math.fabs(long))
+        ret += (20.0 * math.sin(6.0 * lng * pi) + 20.0 *
+                math.sin(2.0 * long * pi)) * 2.0 / 3.0
+        ret += (20.0 * math.sin(lat * pi) + 40.0 *
+                math.sin(lat / 3.0 * pi)) * 2.0 / 3.0
+        ret += (160.0 * math.sin(lat / 12.0 * pi) + 320 *
+                math.sin(lat * pi / 30.0)) * 2.0 / 3.0
+        return ret
+
+    @staticmethod
+    def _transformlong(long, lat):
+        ret = 300.0 + long + 2.0 * lat + 0.1 * long * long + \
+              0.1 * long * lat + 0.1 * math.sqrt(math.fabs(long))
+        ret += (20.0 * math.sin(6.0 * long * pi) + 20.0 *
+                math.sin(2.0 * long * pi)) * 2.0 / 3.0
+        ret += (20.0 * math.sin(long * pi) + 40.0 *
+                math.sin(long / 3.0 * pi)) * 2.0 / 3.0
+        ret += (150.0 * math.sin(long / 12.0 * pi) + 300.0 *
+                math.sin(long / 30.0 * pi)) * 2.0 / 3.0
+        return ret
+
     def trans_mode_counts(self, modes=None, time=None, gif=None):
         if not modes:
-            self.data['trans_mode'].value_count().plot(kind='bar')
+            self.data['trans_mode'].value_counts().plot(kind='bar')
         else:
             return
 
@@ -420,7 +449,7 @@ if __name__ == '__main__':
     longMax = 116.88
     area = [latMin, longMin, latMax, longMax]
 
-    ZJG = [30.298756, 120.080884, 30.313891, 120.092728]
+    ZJG = [30.311079, 120.079777, 30.295036, 120.092867]
     # vs.heatmap(vs.data, vs.fitarea(vs.data))
     # vs.calc_segment_features()
     vs.plot_distribution('velocity')
