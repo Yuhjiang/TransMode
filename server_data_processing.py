@@ -168,7 +168,7 @@ while i < lines_num:
     num += 1
 
 
-trip_path = r'D:\Zhejiang University\Graduate Project\Data\Data\trip.csv'
-excel_path = r'D:\Zhejiang University\Graduate Project\Data\Data\trip.xls'
+trip_path = r'D:\Zhejiang University\Graduate Project\Data\Data\CLeaned\trip.csv'
+excel_path = r'D:\Zhejiang University\Graduate Project\Data\Data\Cleaned\trip.xls'
 data.to_csv(trip_path)
 csv2excel(trip_path, excel_path)
